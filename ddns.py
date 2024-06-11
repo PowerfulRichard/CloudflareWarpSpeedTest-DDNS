@@ -42,7 +42,7 @@ with open("ip.txt", "w") as f:
 print("已生成并保存IPv6地址到 'ip.txt' 文件中。")
 
 # 执行系统命令并实时输出
-command = r".\CloudflareWarpSpeedTest.exe -q=false -p 0 -f ip.txt -tlr 0 -o ipv6.csv"
+command = r".\CloudflareWarpSpeedTest.exe -p 0 -f ip.txt -tlr 0 -o ipv6.csv"
 # command = r".\warp.exe -output ipv6.csv" ### 需要格式化ip.txt地址
 process = subprocess.Popen(["powershell", "-Command", command])
 
@@ -54,17 +54,17 @@ with open('ipv6.csv', newline='') as csvfile:
     reader = csv.reader(csvfile)    # 创建一个csv读取器
     next(reader)                    # 跳过第一行
     second_row = next(reader)       # 读取第二行
-    addr = is_ipv6(second_row[0])     # 获取第二行的第一个值
+    addr = is_ipv6(second_row[0])   # 获取第二行的第一个值
 
-token="Bearer XXXXXXXXXXXXXXXXXXXXXXX"
-zone_id="XXXXXXXXXXXXXXXXXXXXXXXXX"
-dns_id="XXXXXXXXXXXXXXXXXXXXXXXX"
+token="Bearer XXXXXXXXXXXXXXXXXXXXXXX"  #填写API token(40位)
+zone_id="XXXXXXXXXXXXXXXXXXXXXXXXX"     #填写zone ID(32位,详见https://developers.cloudflare.com/api/operations/zones-get)
+dns_id="XXXXXXXXXXXXXXXXXXXXXXXX"       #填写dns ID(32位，详见https://developers.cloudflare.com/api/operations/zones-0-get)
 url = "https://api.cloudflare.com/client/v4/zones/"+zone_id+"/dns_records/"+dns_id
 payload = {
     "content": addr,
-    "name": "XXX.XXX.XXX",
+    "name": "XXX.XXX.XXX",  #填写ddns域名
     "proxied": False,
-    "type": "AAAA", #ipv4地址填A，ipv6地址填AAAA
+    "type": "AAAA",         #ipv4地址填A，ipv6地址填AAAA
     "ttl": 1
 }
 headers = {
